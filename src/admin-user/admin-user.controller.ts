@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AdminUserService } from './admin-user.service';
+import { CreateAdminUserDTO } from './dto/create-admin-user.dto';
 
 @Controller('admin-user')
 export class AdminUserController {
@@ -12,4 +13,6 @@ export class AdminUserController {
   getOne(@Param('id') id: number) {
     return this.adminUserService.getOne(id);
   }
+  @Post('')
+  create(@Body() dto: CreateAdminUserDTO) {}
 }
