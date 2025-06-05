@@ -15,7 +15,7 @@ import { UserModule } from './user/user.module';
       port: 3306,
       password: process.env.DATABASE_PASSWORD ?? 'root',
       username: process.env.DATABASE_USERNAME ?? 'root',
-      database: process.env.DATABASE_NAME ?? 'nest_e_commerce',
+      database: process.env.DATABASE_NAME ?? 'test',
       entities: [AdminUser, User],
       synchronize: true,
     }),

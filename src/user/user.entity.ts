@@ -10,13 +10,19 @@ import {
 
 @Entity()
 export class User implements BaseUser, Timestamps {
+  constructor(data?: Partial<User>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
