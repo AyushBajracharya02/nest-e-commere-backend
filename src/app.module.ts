@@ -1,23 +1,59 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AdminUser } from '@/admin-user/admin-user.entity';
-import { User } from '@/user/user.entity';
 import { AdminUserModule } from './admin-user/admin-user.module';
 import { UserModule } from './user/user.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import Joi from 'joi';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      // type: process.env.DATABASE_TYPE ?? 'mysql',
-      type: 'mysql',
-      host: process.env.DATABASE_URL ?? 'localhost',
-      // port: parseInt(process.env.DATABASE_PORT) ?? 3306,
-      port: 3306,
-      password: process.env.DATABASE_PASSWORD ?? 'root',
-      username: process.env.DATABASE_USERNAME ?? 'root',
-      database: process.env.DATABASE_NAME ?? 'test',
-      entities: [AdminUser, User],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationSchema: Joi.object({
+        // DATABASE_TYPE: Joi.string()
+        //   .valid(
+        //     'mysql',
+        //     'mariadb',
+        //     'postgres',
+        //     'cockroachdb',
+        //     'sqlite',
+        //     'mssql',
+        //     'sap',
+        //     'oracle',
+        //     'cordova',
+        //     'nativescript',
+        //     'react-native',
+        //     'sqljs',
+        //     'mongodb',
+        //     'aurora-mysql',
+        //     'aurora-postgres',
+        //     'expo',
+        //     'better-sqlite3',
+        //     'capacitor',
+        //     'spanner',
+        //   )
+        //   .default('mysql'),
+        DATABASE_URL: Joi.string().default('localhost'),
+        DATABASE_PORT: Joi.number().default(3306),
+        DATABASE_PASSWORD: Joi.string().default('root'),
+        DATABASE_USERNAME: Joi.string().default('root'),
+        DATABASE_NAME: Joi.string().default('test'),
+      }),
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        // type: config.get('DATABASE_TYPE'),
+        type: 'mysql',
+        host: config.get('DATABASE_URL'),
+        port: config.get('DATABASE_PORT'),
+        password: config.get('DATABASE_PASSWORD'),
+        username: config.get('DATABASE_USERNAME'),
+        database: config.get('DATABASE_NAME'),
+        synchronize: true,
+        autoLoadEntities: true,
+      }),
     }),
     AdminUserModule,
     UserModule,
