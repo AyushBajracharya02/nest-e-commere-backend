@@ -1,3 +1,3 @@
-import { BaseCreateUserDTO } from '@/common/dto/base-create-user.dto';
+import { BaseUserDTO } from '@/common/dto/base-user.dto';
 
-export class SignupDTO extends BaseCreateUserDTO {}
+export class SignupDTO extends BaseUserDTO {}
