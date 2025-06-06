@@ -4,6 +4,7 @@ import { AdminUserModule } from './admin-user/admin-user.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import Joi from 'joi';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import Joi from 'joi';
     }),
     AdminUserModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
